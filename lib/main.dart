@@ -5,6 +5,8 @@ import 'package:doctor_appointment/features/fovorites/logic/cubit/favorites_cubi
 import 'package:doctor_appointment/features/home/data/services/category_service.dart';
 import 'package:doctor_appointment/features/home/logic/category_cubit/cubit/category_cubit.dart';
 import 'package:doctor_appointment/features/intro/ui/splash_screen.dart';
+import 'package:doctor_appointment/features/profile/data/services/profile_service.dart';
+import 'package:doctor_appointment/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,6 +55,10 @@ class HealthPalApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 FavoritesCubit(FavoritesService())..getFavorites(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ProfileCubit(ProfileService())..getUserProfile(),
           ),
         ],
         child: MaterialApp(

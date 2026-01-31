@@ -14,6 +14,8 @@ class FavoritesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorsManager.white,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
         backgroundColor: ColorsManager.white,

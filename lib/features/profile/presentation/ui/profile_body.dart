@@ -4,7 +4,6 @@ import 'package:doctor_appointment/core/theming/styles.dart';
 import 'package:doctor_appointment/features/auth/ui/login_screen.dart';
 import 'package:doctor_appointment/features/fovorites/ui/favorites_screen.dart';
 import 'package:doctor_appointment/features/notifications/ui/notification_screen.dart';
-import 'package:doctor_appointment/features/profile/data/services/profile_service.dart';
 import 'package:doctor_appointment/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:doctor_appointment/features/profile/presentation/ui/fill_profile_screen.dart';
 import 'package:doctor_appointment/features/profile/presentation/widget/custom_go_screen.dart';
@@ -18,27 +17,47 @@ class ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileCubit(ProfileService())..getUserProfile(),
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: ColorsManager.white,
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         backgroundColor: ColorsManager.white,
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          backgroundColor: ColorsManager.white,
-          title: Text("Profile", style: TextStyles.font18BlackBold),
-        ),
-        body: BlocBuilder<ProfileCubit, ProfileState>(
-          builder: (context, state) {
-            if (state is ProfileLoading) {
-              return Center(
-                child: CircularProgressIndicator(color: ColorsManager.darkTeal),
-              );
-            } else if (state is ProfileError) {
-              return Center(child: Text(state.error));
-            } else if (state is ProfileLoaded) {
-              final user = state.userModel;
-              return SingleChildScrollView(
+        title: Text("Profile", style: TextStyles.font18BlackBold),
+      ),
+      body: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileLoggedOut) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+              (route) => false,
+            );
+          }
+          if (state is ProfileError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
+          }
+        },
+        builder: (context, state) {
+          if (state is ProfileLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: ColorsManager.darkBlue),
+            );
+          } else if (state is ProfileError) {
+            return Center(child: Text(state.error));
+          } else if (state is ProfileLoaded) {
+            final user = state.userModel;
+            return RefreshIndicator(
+              onRefresh: () async {
+                await context.read<ProfileCubit>().getUserProfile();
+              },
+              color: ColorsManager.darkTeal,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -53,7 +72,9 @@ class ProfileBody extends StatelessWidget {
                               backgroundImage:
                                   (user.avatarUrl != null &&
                                       user.avatarUrl!.isNotEmpty)
-                                  ? NetworkImage(user.avatarUrl!)
+                                  ? NetworkImage(
+                                      "${user.avatarUrl!}?t=${DateTime.now().millisecondsSinceEpoch}",
+                                    )
                                   : null,
                               child:
                                   (user.avatarUrl == null ||
@@ -148,15 +169,6 @@ class ProfileBody extends StatelessWidget {
                             builder: (context) => LogoutDialog(
                               onConfirm: () async {
                                 await context.read<ProfileCubit>().logout();
-                                if (context.mounted) {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ),
-                                    (route) => false,
-                                  );
-                                }
                               },
                             ),
                           );
@@ -179,11 +191,11 @@ class ProfileBody extends StatelessWidget {
                     ],
                   ),
                 ),
-              );
-            }
-            return SizedBox.shrink();
-          },
-        ),
+              ),
+            );
+          }
+          return SizedBox.shrink();
+        },
       ),
     );
   }

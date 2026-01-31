@@ -18,3 +18,4 @@ final class ProfileLoaded extends ProfileState {
   final UserProfileModel userModel;
   ProfileLoaded(this.userModel);
 }
+final class ProfileLoggedOut extends ProfileState {}
