@@ -96,4 +96,25 @@ class AuthService {
   bool isLoggedIn() {
     return supabase.auth.currentSession != null;
   }
+
+  Future<bool> isUserCompletedProfile() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) return false;
+
+    try {
+      final data = await supabase
+          .from("profiles")
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (data == null) return false;
+      if (data['role'] == null || data['role'].toString().isEmpty) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

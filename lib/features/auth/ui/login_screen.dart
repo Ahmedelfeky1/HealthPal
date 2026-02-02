@@ -12,6 +12,8 @@ import 'package:doctor_appointment/features/auth/ui/forgot_password_screen.dart'
 import 'package:doctor_appointment/features/auth/ui/signup_screen.dart';
 import 'package:doctor_appointment/features/home/presentation/main_layout.dart';
 import 'package:doctor_appointment/features/home/presentation/ui/home_screen.dart';
+import 'package:doctor_appointment/features/profile/presentation/ui/fill_profile_screen.dart';
+import 'package:doctor_appointment/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +31,7 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthCubit(AuthService()),
       child: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is AuthLoading) {
             showDialog(
               context: context,
@@ -39,10 +41,26 @@ class LoginScreen extends StatelessWidget {
             );
           } else if (state is AuthSuccess) {
             Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => MainLayout()),
-            );
+            final isComplete = await AuthService().isUserCompletedProfile();
+            if (context.mounted) {
+              if (isComplete) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainLayout()),
+                );
+              } else {
+                final user = supabase.auth.currentUser;
+                final firstName = user?.userMetadata?['full_name'] ?? '';
+                final email = user?.email ?? '';
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        FillProfileScreen(firstName: firstName, email: email),
+                  ),
+                );
+              }
+            }
           } else if (state is AuthError) {
             Navigator.pop(context);
             ScaffoldMessenger.of(
@@ -122,13 +140,31 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () async {
                               try {
                                 await AuthService().signInWithGoogle();
+                                final isComplete = await AuthService()
+                                    .isUserCompletedProfile();
                                 if (context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeScreen(),
-                                    ),
-                                  );
+                                  if (isComplete) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainLayout(),
+                                      ),
+                                    );
+                                  } else {
+                                    final user = supabase.auth.currentUser;
+                                    final firstName =
+                                        user?.userMetadata?['full_name'] ?? '';
+                                    final email = user?.email ?? '';
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FillProfileScreen(
+                                          firstName: firstName,
+                                          email: email,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 }
                               } catch (e) {
                                 if (context.mounted) {
@@ -150,13 +186,31 @@ class LoginScreen extends StatelessWidget {
                             onPressed: () async {
                               try {
                                 await AuthService().signInWithFacebook();
+                                final isComplete = await AuthService()
+                                    .isUserCompletedProfile();
                                 if (context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeScreen(),
-                                    ),
-                                  );
+                                  if (isComplete) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainLayout(),
+                                      ),
+                                    );
+                                  } else {
+                                    final user = supabase.auth.currentUser;
+                                    final firstName =
+                                        user?.userMetadata?['full_name'] ?? '';
+                                    final email = user?.email ?? '';
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FillProfileScreen(
+                                          firstName: firstName,
+                                          email: email,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(

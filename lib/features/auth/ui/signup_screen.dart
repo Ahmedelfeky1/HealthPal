@@ -9,8 +9,10 @@ import 'package:doctor_appointment/features/auth/data/models/signup_model.dart';
 import 'package:doctor_appointment/features/auth/data/services/auth_service.dart';
 import 'package:doctor_appointment/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/ui/login_screen.dart';
+import 'package:doctor_appointment/features/home/presentation/main_layout.dart';
 import 'package:doctor_appointment/features/home/presentation/ui/home_screen.dart';
 import 'package:doctor_appointment/features/profile/presentation/ui/fill_profile_screen.dart';
+import 'package:doctor_appointment/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -150,13 +152,31 @@ class SignupScreen extends StatelessWidget {
                             onPressed: () async {
                               try {
                                 await AuthService().signInWithGoogle();
+                                final isComplete = await AuthService()
+                                    .isUserCompletedProfile();
                                 if (context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeScreen(),
-                                    ),
-                                  );
+                                  if (isComplete) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainLayout(),
+                                      ),
+                                    );
+                                  } else {
+                                    final user = supabase.auth.currentUser;
+                                    final firstName =
+                                        user?.userMetadata?['full_name'] ?? '';
+                                    final email = user?.email ?? '';
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FillProfileScreen(
+                                          firstName: firstName,
+                                          email: email,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 }
                               } catch (e) {
                                 if (context.mounted) {
@@ -178,13 +198,31 @@ class SignupScreen extends StatelessWidget {
                             onPressed: () async {
                               try {
                                 await AuthService().signInWithFacebook();
+                                final isComplete = await AuthService()
+                                    .isUserCompletedProfile();
                                 if (context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomeScreen(),
-                                    ),
-                                  );
+                                  if (isComplete) {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainLayout(),
+                                      ),
+                                    );
+                                  } else {
+                                    final user = supabase.auth.currentUser;
+                                    final firstName =
+                                        user?.userMetadata?['full_name'] ?? '';
+                                    final email = user?.email ?? '';
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FillProfileScreen(
+                                          firstName: firstName,
+                                          email: email,
+                                        ),
+                                      ),
+                                    );
+                                  }
                                 }
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(

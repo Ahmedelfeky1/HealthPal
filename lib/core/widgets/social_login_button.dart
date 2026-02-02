@@ -1,7 +1,5 @@
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
-import 'package:doctor_appointment/features/auth/data/services/auth_service.dart';
-import 'package:doctor_appointment/features/home/presentation/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
