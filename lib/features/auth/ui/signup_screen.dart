@@ -10,7 +10,6 @@ import 'package:doctor_appointment/features/auth/data/services/auth_service.dart
 import 'package:doctor_appointment/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/ui/login_screen.dart';
 import 'package:doctor_appointment/features/home/presentation/main_layout.dart';
-import 'package:doctor_appointment/features/home/presentation/ui/home_screen.dart';
 import 'package:doctor_appointment/features/profile/presentation/ui/fill_profile_screen.dart';
 import 'package:doctor_appointment/main.dart';
 import 'package:flutter/material.dart';
