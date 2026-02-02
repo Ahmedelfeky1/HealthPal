@@ -2,6 +2,42 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>GIDClientID</key>
+    <string>622340714786-udildof1omisc1retjb08nroncf60pe5.apps.googleusercontent.com</string>
+    
+    <key>FacebookAppID</key>
+    <string>1424568585784631</string>
+    <key>FacebookClientToken</key>
+    <string>1d813d44658200c2ea9fddc08cd71e6d</string>
+    <key>FacebookDisplayName</key>
+    <string>HealthPal</string>
+    
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.622340714786-udildof1omisc1retjb08nroncf60pe5</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>fb1424568585784631</string>
+            </array>
+        </dict>
+    </array>
+
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>google.navigation</string>
+        <string>comgooglemaps</string>
+        <string>fbapi</string>
+        <string>fb-messenger-share-api</string>
+    </array>
+
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
@@ -41,21 +77,15 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to find nearby doctors.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>We need your location to find nearby doctors.</string>
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
     
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>google.navigation</string>
-        <string>comgooglemaps</string>
-    </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to find nearby doctors.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to find nearby doctors.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>We need access to your gallery to upload profile picture.</string>
     <key>NSCameraUsageDescription</key>

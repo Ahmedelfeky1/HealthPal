@@ -11,6 +11,7 @@ import 'package:doctor_appointment/features/auth/logic/cubit/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/ui/forgot_password_screen.dart';
 import 'package:doctor_appointment/features/auth/ui/signup_screen.dart';
 import 'package:doctor_appointment/features/home/presentation/main_layout.dart';
+import 'package:doctor_appointment/features/home/presentation/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -118,13 +119,55 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(height: 20.h),
                           SocialLoginButton(
                             text: "Sign in with Google",
-                            onPressed: () {},
+                            onPressed: () async {
+                              try {
+                                await AuthService().signInWithGoogle();
+                                if (context.mounted) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "Failed to login with Google ${e.toString()}",
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
                             iconPath: AppAssets.googleLogo,
                           ),
                           SizedBox(height: 10.h),
                           SocialLoginButton(
                             text: "Sign In with Facebook",
-                            onPressed: () {},
+                            onPressed: () async {
+                              try {
+                                await AuthService().signInWithFacebook();
+                                if (context.mounted) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HomeScreen(),
+                                    ),
+                                  );
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Failed to login with Facebook ${e.toString()}",
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             iconPath: AppAssets.facebookLogo,
                           ),
                           SizedBox(height: 10.h),

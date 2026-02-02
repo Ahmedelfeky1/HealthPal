@@ -54,6 +54,8 @@ dependencies:
   readmore: ^3.0.0
   geocoding: ^3.0.0
   image_picker: ^1.0.7  
+  google_sign_in: ^6.2.1
+  flutter_facebook_auth: ^7.1.5
   
 
 dev_dependencies:
