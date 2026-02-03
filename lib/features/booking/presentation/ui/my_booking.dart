@@ -189,8 +189,8 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   BorderRadius.circular(12.r),
                                               child: Image.network(
                                                 appointment.doctorImage,
-                                                width: 120.w,
-                                                height: 120.h,
+                                                width: 100.w,
+                                                height: 100.h,
                                                 fit: BoxFit.cover,
                                                 errorBuilder:
                                                     (
@@ -280,7 +280,64 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   backgroundColor:
                                                       ColorsManager.lighterGray,
                                                   borderRadius: 30.r,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    final cubit = context
+                                                        .read<
+                                                          MyAppointmentsCubit
+                                                        >();
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        backgroundColor:
+                                                            ColorsManager.white,
+                                                        title: Text(
+                                                          "Cancel Appointment",
+                                                          style: TextStyles
+                                                              .font18BlackBold,
+                                                        ),
+                                                        content: Text(
+                                                          "Are you sure you want to cancel this appointment?",
+                                                          style: TextStyles
+                                                              .font16WhiteSemiBold,
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                  context,
+                                                                ),
+                                                            child: Text(
+                                                              "No",
+                                                              style: TextStyles
+                                                                  .font18BlackBold
+                                                                  .copyWith(
+                                                                    color:
+                                                                        ColorsManager
+                                                                            .gray,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              cubit
+                                                                  .cancelAppointment(
+                                                                    appointment
+                                                                        .id,
+                                                                  );
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              "Yes",
+                                                              style: TextStyles
+                                                                  .font18BlackBold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(width: 12.w),
@@ -290,7 +347,61 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   backgroundColor:
                                                       ColorsManager.darkTeal,
                                                   borderRadius: 30.r,
-                                                  onPressed: () {},
+                                                  onPressed: () async {
+                                                    final cubit = context
+                                                        .read<
+                                                          MyAppointmentsCubit
+                                                        >();
+                                                    final DateTime?
+                                                    pickedDate = await showDatePicker(
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime(2030),
+                                                      builder: (context, child) {
+                                                        return Theme(
+                                                          data: Theme.of(context).copyWith(
+                                                            primaryColor:
+                                                                ColorsManager
+                                                                    .darkTeal,
+                                                            colorScheme:
+                                                                const ColorScheme.light(
+                                                                  primary:
+                                                                      ColorsManager
+                                                                          .darkTeal,
+                                                                ),
+                                                          ),
+                                                          child: child!,
+                                                        );
+                                                      },
+                                                    );
+                                                    if (pickedDate != null &&
+                                                        context.mounted) {
+                                                      final TimeOfDay?
+                                                      pickedTime =
+                                                          await showTimePicker(
+                                                            context: context,
+                                                            initialTime:
+                                                                TimeOfDay.now(),
+                                                          );
+                                                      if (pickedTime != null &&
+                                                          context.mounted) {
+                                                        final String newDate =
+                                                            "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+                                                        final String newTime =
+                                                            pickedTime.format(
+                                                              context,
+                                                            );
+                                                        cubit
+                                                            .rescheduleAppointment(
+                                                              appointment.id,
+                                                              newDate,
+                                                              newTime,
+                                                            );
+                                                      }
+                                                    }
+                                                  },
                                                 ),
                                               ),
                                             ],

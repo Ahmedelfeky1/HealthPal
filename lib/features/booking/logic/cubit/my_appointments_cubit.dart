@@ -18,4 +18,31 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
       emit(MyAppointmentsError(error: e.toString()));
     }
   }
+
+  Future<void> cancelAppointment(int appointmentId) async {
+    try {
+      await myAppointmentsRepo.cancelAppointment(appointmentId);
+      await getAppointments();
+    } catch (e) {
+      emit(MyAppointmentsError(error: e.toString()));
+    }
+  }
+
+  Future<void> rescheduleAppointment(
+    int appointmentId,
+    String newDate,
+    String newTime,
+  ) async {
+    try {
+      emit(MyAppointmentsLoading());
+      await myAppointmentsRepo.rescheduleAppointment(
+        appointmentId,
+        newDate,
+        newTime,
+      );
+      await getAppointments();
+    } catch (e) {
+      emit(MyAppointmentsError(error: e.toString()));
+    }
+  }
 }

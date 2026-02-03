@@ -20,10 +20,30 @@ class MyAppointmentsService {
     final response = await supabaseClient
         .from("appointments")
         .select("*,doctors(name, image_url, specialty,address)")
+        .eq("user_id", supabaseClient.auth.currentUser!.id)
+        .gte('date', DateTime.now().toIso8601String())
         .order("date", ascending: false);
     final List<AppointmentModel> appointments = (response as List)
         .map((e) => AppointmentModel.fromJson(e))
         .toList();
     return appointments;
+  }
+
+  Future<void> cancelAppointment(int appointmentId) async {
+    await supabaseClient
+        .from("appointments")
+        .update({"status": "cancelled"})
+        .eq("id", appointmentId);
+  }
+
+  Future<void> rescheduleAppointment(
+    int appointmentId,
+    String newDate,
+    String newTime,
+  ) async {
+    await supabaseClient
+        .from("appointments")
+        .update({'date': newDate, 'time': newTime, 'status': 'pending'})
+        .eq("id", appointmentId);
   }
 }

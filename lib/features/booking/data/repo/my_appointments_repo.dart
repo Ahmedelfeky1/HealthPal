@@ -12,4 +12,28 @@ class MyAppointmentsRepo {
       throw e.toString();
     }
   }
+
+  Future<void> cancelAppointment(int appointmentId) async {
+    try {
+      await myAppointmentsService.cancelAppointment(appointmentId);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> rescheduleAppointment(
+    int appointmentId,
+    String newDate,
+    String newTime,
+  ) async {
+    try {
+      await myAppointmentsService.rescheduleAppointment(
+        appointmentId,
+        newDate,
+        newTime,
+      );
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
