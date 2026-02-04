@@ -20,6 +20,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool isReadOnly;
   final void Function()? onTap;
   final TextInputType? keyboardType;
+  final int maxLines;
 
   const CustomTextFormField({
     super.key,
@@ -39,6 +40,7 @@ class CustomTextFormField extends StatefulWidget {
     this.isReadOnly = false,
     this.onTap,
     this.keyboardType,
+    this.maxLines = 1,
   });
 
   @override
@@ -62,6 +64,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       readOnly: widget.isReadOnly,
       onTap: widget.onTap,
       onChanged: widget.onChanged,
+      maxLines: widget.maxLines,
+      
       style: TextStyles.font14GrayBlack,
       decoration: InputDecoration(
         isDense: true,

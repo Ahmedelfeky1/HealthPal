@@ -7,6 +7,7 @@ import 'package:doctor_appointment/features/doctors/presentation/ui/nearby_docto
 import 'package:doctor_appointment/features/home/presentation/widget/categories_home.dart';
 import 'package:doctor_appointment/features/doctors/presentation/widget/nearby_doctors_section.dart';
 import 'package:doctor_appointment/features/home/presentation/widget/home_bannar.dart';
+import 'package:doctor_appointment/features/notifications/ui/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -79,7 +80,12 @@ class HomeScreen extends StatelessWidget {
               Icons.notifications,
               color: ColorsManager.darkTeal,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
           ),
         ],
       ),

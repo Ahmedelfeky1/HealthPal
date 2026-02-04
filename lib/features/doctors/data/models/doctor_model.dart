@@ -1,5 +1,6 @@
 class DoctorModel {
   final int id;
+  final int? doctorId;
   final String name;
   final String specialty;
   final String imageUrl;
@@ -29,6 +30,7 @@ class DoctorModel {
     this.longitude,
     required this.patients,
     required this.experience,
+    this.doctorId,
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
@@ -50,7 +52,8 @@ class DoctorModel {
           ? (json['longitude'] as num).toDouble()
           : null,
       patients: json['patients'] ?? '0+',
-      experience: json['experience_years']??'0+',
+      experience: json['experience_years'] ?? '0+',
+      doctorId: json['doctor_id'] ?? 0,
     );
   }
 }

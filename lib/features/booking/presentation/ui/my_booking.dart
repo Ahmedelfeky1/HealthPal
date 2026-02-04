@@ -1,9 +1,17 @@
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
 import 'package:doctor_appointment/core/widgets/custom_elvat_bt.dart';
+import 'package:doctor_appointment/features/booking/data/repo/booking_repo.dart';
 import 'package:doctor_appointment/features/booking/data/repo/my_appointments_repo.dart';
 import 'package:doctor_appointment/features/booking/data/service/booking_service.dart';
+import 'package:doctor_appointment/features/booking/logic/booking_cubit/booking_cubit.dart';
 import 'package:doctor_appointment/features/booking/logic/cubit/my_appointments_cubit.dart';
+import 'package:doctor_appointment/features/booking/presentation/ui/booking_screen.dart';
+import 'package:doctor_appointment/features/doctors/data/models/doctor_model.dart';
+import 'package:doctor_appointment/features/reviews/data/repo/reviews_repo.dart';
+import 'package:doctor_appointment/features/reviews/data/services/reviews_service.dart';
+import 'package:doctor_appointment/features/reviews/logic/cubit/reviews_cubit.dart';
+import 'package:doctor_appointment/features/reviews/presentation/widget/add_review_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -302,10 +310,16 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                         ),
                                                         actions: [
                                                           TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                  context,
-                                                                ),
+                                                            onPressed: () {
+                                                              cubit
+                                                                  .cancelAppointment(
+                                                                    appointment
+                                                                        .id,
+                                                                  );
+                                                              Navigator.pop(
+                                                                context,
+                                                              );
+                                                            },
                                                             child: Text(
                                                               "No",
                                                               style: TextStyles
@@ -417,7 +431,42 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   backgroundColor:
                                                       ColorsManager.lighterGray,
                                                   borderRadius: 30.r,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => BlocProvider(
+                                                          create: (context) =>
+                                                              BookingCubit(
+                                                                BookingRepo(
+                                                                  bookingService:
+                                                                      BookingService(),
+                                                                ),
+                                                              ),
+                                                          child: BookingScreen(
+                                                            doctorModel: DoctorModel(
+                                                              id: appointment
+                                                                  .doctorId,
+                                                              name: appointment
+                                                                  .doctorName,
+                                                              specialty:
+                                                                  appointment
+                                                                      .speciality,
+                                                              imageUrl: appointment
+                                                                  .doctorImage,
+                                                              address:
+                                                                  appointment
+                                                                      .address,
+                                                              rating: 0,
+                                                              reviewsCount: 0,
+                                                              patients: '0',
+                                                              experience: '0',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               SizedBox(width: 12.w),
@@ -427,7 +476,41 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   backgroundColor:
                                                       ColorsManager.darkTeal,
                                                   borderRadius: 30.r,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      backgroundColor:
+                                                          ColorsManager.white,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.vertical(
+                                                              top:
+                                                                  Radius.circular(
+                                                                    20.r,
+                                                                  ),
+                                                            ),
+                                                      ),
+                                                      builder: (context) => BlocProvider(
+                                                        create: (context) =>
+                                                            ReviewsCubit(
+                                                              ReviewsRepo(
+                                                                reviewsService:
+                                                                    ReviewsService(),
+                                                              ),
+                                                            ),
+                                                        child:
+                                                            AddReviewBottomSheet(
+                                                              doctorId:
+                                                                  appointment
+                                                                      .doctorId,
+                                                              appointmentId:
+                                                                  appointment
+                                                                      .id,
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                             ],
@@ -443,7 +526,42 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                   backgroundColor:
                                                       ColorsManager.lighterGray,
                                                   borderRadius: 30.r,
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) => BlocProvider(
+                                                          create: (context) =>
+                                                              BookingCubit(
+                                                                BookingRepo(
+                                                                  bookingService:
+                                                                      BookingService(),
+                                                                ),
+                                                              ),
+                                                          child: BookingScreen(
+                                                            doctorModel: DoctorModel(
+                                                              id: appointment
+                                                                  .doctorId,
+                                                              name: appointment
+                                                                  .doctorName,
+                                                              specialty:
+                                                                  appointment
+                                                                      .speciality,
+                                                              imageUrl: appointment
+                                                                  .doctorImage,
+                                                              address:
+                                                                  appointment
+                                                                      .address,
+                                                              rating: 0,
+                                                              reviewsCount: 0,
+                                                              patients: '0',
+                                                              experience: '0',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                             ],

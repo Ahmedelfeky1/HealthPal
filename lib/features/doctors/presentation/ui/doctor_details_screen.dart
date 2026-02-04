@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:doctor_appointment/core/constants/app_assets.dart';
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
@@ -11,7 +13,7 @@ import 'package:doctor_appointment/features/booking/presentation/ui/booking_scre
 import 'package:doctor_appointment/features/doctors/data/models/doctor_model.dart';
 import 'package:doctor_appointment/features/doctors/presentation/widget/doctor_info_item.dart';
 import 'package:doctor_appointment/features/doctors/presentation/widget/doctor_review_item.dart';
-import 'package:doctor_appointment/features/reviews/ui/reviews_doctor_screen.dart';
+import 'package:doctor_appointment/features/reviews/presentation/ui/reviews_doctor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -200,7 +202,7 @@ class DoctorDetailsScreen extends StatelessWidget {
                 text: "Reviews",
                 style: TextStyles.font18BlackBold,
                 textButton: "See All",
-                screenName: const ReviewsDoctorScreen(),
+                screenName: ReviewsDoctorScreen(doctorId: doctorModel.id),
                 btStyle: TextStyles.font13GrayRegular,
               ),
               SizedBox(height: 10.h),
