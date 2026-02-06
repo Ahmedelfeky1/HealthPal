@@ -311,11 +311,6 @@ class _MyBookingBodyState extends State<MyBookingBody> {
                                                         actions: [
                                                           TextButton(
                                                             onPressed: () {
-                                                              cubit
-                                                                  .cancelAppointment(
-                                                                    appointment
-                                                                        .id,
-                                                                  );
                                                               Navigator.pop(
                                                                 context,
                                                               );

@@ -2,6 +2,7 @@ import 'package:doctor_appointment/core/constants/app_assets.dart';
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
 import 'package:doctor_appointment/features/auth/ui/login_screen.dart';
+import 'package:doctor_appointment/features/doctor_profile/presentation/ui/doctor_data_screen.dart';
 import 'package:doctor_appointment/features/fovorites/ui/favorites_screen.dart';
 import 'package:doctor_appointment/features/notifications/ui/notification_screen.dart';
 import 'package:doctor_appointment/features/profile/logic/cubit/profile_cubit.dart';
@@ -126,6 +127,21 @@ class ProfileBody extends StatelessWidget {
                           });
                         },
                       ),
+                      if (user.role.toLowerCase() == 'doctor') ...[
+                        CustomGoScreen(
+                          iconSvg: AppAssets.doctorInfo,
+                          title: "Doctor Info",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorDataScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+
                       CustomGoScreen(
                         iconSvg: AppAssets.favorite,
                         title: "Favorites",

@@ -71,184 +71,198 @@ class LoginScreen extends StatelessWidget {
           return Scaffold(
             body: Form(
               key: formKey,
-              child: Column(
-                children: [
-                  SizedBox(height: 70.h),
-                  SvgPicture.asset(AppAssets.logoBlack),
-                  SizedBox(height: 32.h),
-                  Text("Hi, Welcome Back! ", style: TextStyles.font18BlackBold),
-                  Text(
-                    "Hope you’re doing fine.",
-                    style: TextStyles.font13GrayRegular,
-                  ),
-                  SizedBox(height: 32.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          CustomTextFormField(
-                            hintText: "Your Email",
-                            controller: emailController,
-                            prefixIcon: Icon(
-                              Icons.email_outlined,
-                              color: ColorsManager.gray,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 70.h),
+                    SvgPicture.asset(AppAssets.logoBlack),
+                    SizedBox(height: 32.h),
+                    Text(
+                      "Hi, Welcome Back! ",
+                      style: TextStyles.font18BlackBold,
+                    ),
+                    Text(
+                      "Hope you’re doing fine.",
+                      style: TextStyles.font13GrayRegular,
+                    ),
+                    SizedBox(height: 32.h),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            CustomTextFormField(
+                              hintText: "Your Email",
+                              controller: emailController,
+                              prefixIcon: Icon(
+                                Icons.email_outlined,
+                                color: ColorsManager.gray,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 16.h),
-                          CustomTextFormField(
-                            controller: passwordController,
-                            hintText: "Password",
-                            isObscureText: true,
-                            prefixIcon: Icon(
-                              Icons.lock_outlined,
-                              color: ColorsManager.gray,
+                            SizedBox(height: 16.h),
+                            CustomTextFormField(
+                              controller: passwordController,
+                              hintText: "Password",
+                              isObscureText: true,
+                              prefixIcon: Icon(
+                                Icons.lock_outlined,
+                                color: ColorsManager.gray,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 20.h),
-                          CustomButton(
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                context.read<AuthCubit>().signin(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
-                              }
-                            },
-                            text: 'Sign In',
-                            borderRadius: 30.r,
-                          ),
-                          SizedBox(height: 10.h),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Divider(color: ColorsManager.lightGray),
-                              ),
-                              Text(
-                                "  or  ",
-                                style: TextStyles.font13GrayRegular,
-                              ),
-                              Expanded(
-                                child: Divider(color: ColorsManager.lightGray),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20.h),
-                          SocialLoginButton(
-                            text: "Sign in with Google",
-                            onPressed: () async {
-                              try {
-                                await AuthService().signInWithGoogle();
-                                final isComplete = await AuthService()
-                                    .isUserCompletedProfile();
-                                if (context.mounted) {
-                                  if (isComplete) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MainLayout(),
-                                      ),
-                                    );
-                                  } else {
-                                    final user = supabase.auth.currentUser;
-                                    final firstName =
-                                        user?.userMetadata?['full_name'] ?? '';
-                                    final email = user?.email ?? '';
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => FillProfileScreen(
-                                          firstName: firstName,
-                                          email: email,
+                            SizedBox(height: 20.h),
+                            CustomButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  context.read<AuthCubit>().signin(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                }
+                              },
+                              text: 'Sign In',
+                              borderRadius: 30.r,
+                            ),
+                            SizedBox(height: 10.h),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: ColorsManager.lightGray,
+                                  ),
+                                ),
+                                Text(
+                                  "  or  ",
+                                  style: TextStyles.font13GrayRegular,
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: ColorsManager.lightGray,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20.h),
+                            SocialLoginButton(
+                              text: "Sign in with Google",
+                              onPressed: () async {
+                                try {
+                                  await AuthService().signInWithGoogle();
+                                  final isComplete = await AuthService()
+                                      .isUserCompletedProfile();
+                                  if (context.mounted) {
+                                    if (isComplete) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainLayout(),
+                                        ),
+                                      );
+                                    } else {
+                                      final user = supabase.auth.currentUser;
+                                      final firstName =
+                                          user?.userMetadata?['full_name'] ??
+                                          '';
+                                      final email = user?.email ?? '';
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FillProfileScreen(
+                                                firstName: firstName,
+                                                email: email,
+                                              ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                } catch (e) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Failed to login with Google ${e.toString()}",
                                         ),
                                       ),
                                     );
                                   }
                                 }
-                              } catch (e) {
-                                if (context.mounted) {
+                              },
+                              iconPath: AppAssets.googleLogo,
+                            ),
+                            SizedBox(height: 10.h),
+                            SocialLoginButton(
+                              text: "Sign In with Facebook",
+                              onPressed: () async {
+                                try {
+                                  await AuthService().signInWithFacebook();
+                                  final isComplete = await AuthService()
+                                      .isUserCompletedProfile();
+                                  if (context.mounted) {
+                                    if (isComplete) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MainLayout(),
+                                        ),
+                                      );
+                                    } else {
+                                      final user = supabase.auth.currentUser;
+                                      final firstName =
+                                          user?.userMetadata?['full_name'] ??
+                                          '';
+                                      final email = user?.email ?? '';
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              FillProfileScreen(
+                                                firstName: firstName,
+                                                email: email,
+                                              ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "Failed to login with Google ${e.toString()}",
+                                        "Failed to login with Facebook ${e.toString()}",
                                       ),
                                     ),
                                   );
                                 }
-                              }
-                            },
-                            iconPath: AppAssets.googleLogo,
-                          ),
-                          SizedBox(height: 10.h),
-                          SocialLoginButton(
-                            text: "Sign In with Facebook",
-                            onPressed: () async {
-                              try {
-                                await AuthService().signInWithFacebook();
-                                final isComplete = await AuthService()
-                                    .isUserCompletedProfile();
-                                if (context.mounted) {
-                                  if (isComplete) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MainLayout(),
-                                      ),
-                                    );
-                                  } else {
-                                    final user = supabase.auth.currentUser;
-                                    final firstName =
-                                        user?.userMetadata?['full_name'] ?? '';
-                                    final email = user?.email ?? '';
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => FillProfileScreen(
-                                          firstName: firstName,
-                                          email: email,
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Failed to login with Facebook ${e.toString()}",
-                                    ),
+                              },
+                              iconPath: AppAssets.facebookLogo,
+                            ),
+                            SizedBox(height: 10.h),
+                            CustomTextBt(
+                              text: "Forgot password?",
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ForgotPasswordScreen(),
                                   ),
                                 );
-                              }
-                            },
-                            iconPath: AppAssets.facebookLogo,
-                          ),
-                          SizedBox(height: 10.h),
-                          CustomTextBt(
-                            text: "Forgot password?",
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordScreen(),
-                                ),
-                              );
-                            },
-                            colorText: ColorsManager.mainBlue,
-                            fontSize: 14.sp,
-                          ),
-                          SizedBox(height: 20.h),
-                          CustomRowData(
-                            text: "Don’t have an account yet? ",
-                            textButton: "Sign Up",
-                            color: ColorsManager.mainBlue,
-                            screenName: SignupScreen(),
-                          ),
-                        ],
+                              },
+                              colorText: ColorsManager.mainBlue,
+                              fontSize: 14.sp,
+                            ),
+                            SizedBox(height: 20.h),
+                            CustomRowData(
+                              text: "Don’t have an account yet? ",
+                              textButton: "Sign Up",
+                              color: ColorsManager.mainBlue,
+                              screenName: SignupScreen(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

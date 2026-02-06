@@ -4,6 +4,7 @@ class ReviewModel {
   final String comment;
   final String createdAt;
   final String userName;
+  final String? userImage;
 
   ReviewModel({
     required this.id,
@@ -11,6 +12,7 @@ class ReviewModel {
     required this.comment,
     required this.createdAt,
     required this.userName,
+    this.userImage,
   });
 
   factory ReviewModel.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,10 @@ class ReviewModel {
       userName: json['profiles'] != null
           ? json['profiles']['full_name']
           : 'User',
+
+      userImage: json['profiles'] != null
+          ? json['profiles']['avatar_url']
+          : null,
     );
   }
 }

@@ -7,7 +7,7 @@ class ReviewsService {
   Future<List<ReviewModel>> getDoctorReviews(int doctorId) async {
     final response = await supabaseClient
         .from('reviews')
-        .select('*, profiles(full_name)')
+        .select('*, profiles(full_name, avatar_url)')
         .eq('doctor_id', doctorId)
         .order('created_at', ascending: false);
     final List<ReviewModel> reviews = (response as List)

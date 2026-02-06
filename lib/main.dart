@@ -41,6 +41,7 @@ class HealthPalApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
+      splitScreenMode: true,
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -66,7 +67,7 @@ class HealthPalApp extends StatelessWidget {
           title: 'HealthPal',
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
-          locale: context.locale,
+          locale: const Locale('en'),
           home: SplashScreen(),
         ),
       ),

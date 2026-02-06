@@ -36,7 +36,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    Image.asset(pages[index].image),
+                    Image.asset(
+                      pages[index].image,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                     SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.only(left: 40, right: 40),

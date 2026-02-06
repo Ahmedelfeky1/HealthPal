@@ -1,6 +1,7 @@
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
@@ -24,8 +25,12 @@ class CustomGoScreen extends StatelessWidget {
           SizedBox(height: 5),
           Row(
             children: [
-              SvgPicture.asset(iconSvg),
-              SizedBox(width: 10),
+              SvgPicture.asset(
+                iconSvg,
+                height: 22.h,
+                color: ColorsManager.darkTeal,
+              ),
+              SizedBox(width: 5.h),
               Text(
                 title,
                 style: TextStyles.font18BlackBold.copyWith(
@@ -42,7 +47,7 @@ class CustomGoScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 5.h),
           Divider(color: ColorsManager.lighterGray, thickness: 1),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theming/colors.dart';
 import '../theming/styles.dart';
@@ -21,6 +22,7 @@ class CustomTextFormField extends StatefulWidget {
   final void Function()? onTap;
   final TextInputType? keyboardType;
   final int maxLines;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextFormField({
     super.key,
@@ -41,6 +43,7 @@ class CustomTextFormField extends StatefulWidget {
     this.onTap,
     this.keyboardType,
     this.maxLines = 1,
+    this.inputFormatters,
   });
 
   @override
@@ -65,7 +68,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       onTap: widget.onTap,
       onChanged: widget.onChanged,
       maxLines: widget.maxLines,
-      
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
       style: TextStyles.font14GrayBlack,
       decoration: InputDecoration(
         isDense: true,

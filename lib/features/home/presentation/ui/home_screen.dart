@@ -124,15 +124,15 @@ class HomeScreen extends StatelessWidget {
               SizedBox(height: 20.h),
               HomeBannar(),
               SizedBox(height: 20.h),
-              CustomRowData(
-                text: "Categories",
-                style: TextStyles.font18BlackBold.copyWith(
-                  color: ColorsManager.darkBlue,
-                  fontSize: 15.sp,
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Categories",
+                  style: TextStyles.font18BlackBold.copyWith(
+                    color: ColorsManager.darkBlue,
+                    fontSize: 15.sp,
+                  ),
                 ),
-                textButton: "See All",
-                btStyle: TextStyles.font14GrayBlack,
-                screenName: Center(child: Text("All Categories")),
               ),
               SizedBox(height: 10.h),
               CategoriesHome(),

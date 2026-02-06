@@ -24,4 +24,5 @@ class AppAssets {
   static const String settings = "assets/icons/setting.svg";
   static const String help = "assets/icons/message-question.svg";
   static const String terms = "assets/icons/security-safe.svg";
+  static const String doctorInfo = 'assets/icons/medicine-bottle.svg';
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:doctor_appointment/core/constants/app_assets.dart';
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
@@ -10,9 +8,11 @@ import 'package:doctor_appointment/features/booking/data/repo/booking_repo.dart'
 import 'package:doctor_appointment/features/booking/data/service/booking_service.dart';
 import 'package:doctor_appointment/features/booking/logic/booking_cubit/booking_cubit.dart';
 import 'package:doctor_appointment/features/booking/presentation/ui/booking_screen.dart';
+import 'package:doctor_appointment/features/doctor_profile/data/services/doctor_info_services.dart';
 import 'package:doctor_appointment/features/doctors/data/models/doctor_model.dart';
 import 'package:doctor_appointment/features/doctors/presentation/widget/doctor_info_item.dart';
 import 'package:doctor_appointment/features/doctors/presentation/widget/doctor_review_item.dart';
+import 'package:doctor_appointment/features/reviews/data/services/reviews_service.dart';
 import 'package:doctor_appointment/features/reviews/presentation/ui/reviews_doctor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,29 +22,6 @@ import 'package:readmore/readmore.dart';
 class DoctorDetailsScreen extends StatelessWidget {
   final DoctorModel doctorModel;
   DoctorDetailsScreen(this.doctorModel, {super.key});
-
-  late final List<Map<String, dynamic>> doctorInfoData = [
-    {
-      'icon': AppAssets.personIcon,
-      'value': doctorModel.patients,
-      'title': 'patients',
-    },
-    {
-      'icon': AppAssets.medalIcon,
-      'value': "${doctorModel.experience}+",
-      'title': 'experience',
-    },
-    {
-      'icon': AppAssets.starIcon,
-      'value': doctorModel.rating,
-      'title': 'rating',
-    },
-    {
-      'icon': AppAssets.messIcon,
-      'value': doctorModel.reviewsCount,
-      'title': 'reviews',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -156,15 +133,47 @@ class DoctorDetailsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 15.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: doctorInfoData.map((item) {
-                  return DoctorInfoItem(
-                    title: item["title"],
-                    value: item["value"].toString(),
-                    icon: item["icon"],
+
+              FutureBuilder<Map<String, dynamic>>(
+                future: DoctorInfoServices().getDoctorStats(doctorModel.id),
+                builder: (context, snapshot) {
+                  Map<String, dynamic> stats = {
+                    'reviewsCount': 0,
+                    'patientsCount': 0,
+                    'experience': '0',
+                    'rating': 0.0,
+                  };
+
+                  if (snapshot.hasData) {
+                    stats = snapshot.data!;
+                  }
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DoctorInfoItem(
+                        title: 'patients',
+                        value: "${stats['patientsCount']}+",
+                        icon: AppAssets.personIcon,
+                      ),
+                      DoctorInfoItem(
+                        title: 'experience',
+                        value: "${stats['experience']}+",
+                        icon: AppAssets.medalIcon,
+                      ),
+                      DoctorInfoItem(
+                        title: 'rating',
+                        value: "${stats['rating']}",
+                        icon: AppAssets.starIcon,
+                      ),
+                      DoctorInfoItem(
+                        title: 'reviews',
+                        value: "${stats['reviewsCount']}",
+                        icon: AppAssets.messIcon,
+                      ),
+                    ],
                   );
-                }).toList(),
+                },
               ),
 
               SizedBox(height: 15.h),
@@ -206,7 +215,41 @@ class DoctorDetailsScreen extends StatelessWidget {
                 btStyle: TextStyles.font13GrayRegular,
               ),
               SizedBox(height: 10.h),
-              DoctorReviewItem(),
+              FutureBuilder(
+                future: ReviewsService().getDoctorReviews(doctorModel.id),
+                builder: (context, Snapshot) {
+                  if (Snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: ColorsManager.darkTeal,
+                      ),
+                    );
+                  }
+                  if (Snapshot.hasError ||
+                      !Snapshot.hasData ||
+                      Snapshot.data!.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Center(
+                        child: Text(
+                          "No reviews yet.",
+                          style: TextStyles.font14GrayBlack,
+                        ),
+                      ),
+                    );
+                  }
+                  final reviews = Snapshot.data!.take(1).toList();
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: reviews.length,
+                    itemBuilder: (context, index) {
+                      return DoctorReviewItem(reviewModel: reviews[index]);
+                    },
+                  );
+                },
+              ),
               SizedBox(height: 15.h),
               CustomButton(
                 text: "Book Appointment",
