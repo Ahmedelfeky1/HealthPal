@@ -38,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   children: [
                     Image.asset(
                       pages[index].image,
-                      height: MediaQuery.of(context).size.height * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.6,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
