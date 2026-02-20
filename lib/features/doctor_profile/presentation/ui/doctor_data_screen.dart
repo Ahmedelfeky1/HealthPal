@@ -354,6 +354,7 @@ class _DoctorDataScreenState extends State<DoctorDataScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter address';
                           }
+                          return null;
                         },
                         hintText: "Detailed Address (e.g. Floor 3, Building 5)",
                         maxLines: 2,
