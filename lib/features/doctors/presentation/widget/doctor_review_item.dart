@@ -1,10 +1,8 @@
-import 'package:doctor_appointment/core/constants/app_assets.dart';
 import 'package:doctor_appointment/core/theming/colors.dart';
 import 'package:doctor_appointment/core/theming/styles.dart';
 import 'package:doctor_appointment/features/reviews/data/models/review_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class DoctorReviewItem extends StatelessWidget {
   final ReviewModel reviewModel;
