@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorDataScreen extends StatefulWidget {
-  DoctorDataScreen({super.key});
+  const DoctorDataScreen({super.key});
 
   @override
   State<DoctorDataScreen> createState() => _DoctorDataScreenState();
@@ -101,7 +101,7 @@ class _DoctorDataScreenState extends State<DoctorDataScreen> {
               );
             } else if (state is DoctorprofileLoaded) {
               final data = state.doctorData;
-              priceController.text = data!.price.toString();
+              priceController.text = data.price.toString();
               bioController.text = data.about;
               phoneController.text = data.phone;
               workingHoursController.text = data.workingHours;
@@ -191,6 +191,7 @@ class _DoctorDataScreenState extends State<DoctorDataScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter About yourself';
                           }
+                          return null;
                         },
                         hintText: "Dr......",
                         maxLines: 5,
@@ -225,6 +226,7 @@ class _DoctorDataScreenState extends State<DoctorDataScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter phone number';
                           }
+                          return null;
                         },
                         hintText: '+201 000 0000',
                         keyboardType: TextInputType.phone,
